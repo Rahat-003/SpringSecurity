@@ -19,16 +19,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 
-        Customizer<CsrfConfigurer<HttpSecurity>> custCsrf = new Customizer<CsrfConfigurer<HttpSecurity>>() {
-            @Override
-            public void customize(CsrfConfigurer<HttpSecurity> configurer) {
-                configurer.disable();
-            }
-        };
-
-        http.csrf(custCsrf);
-
-        http.authorizeHttpRequests();
+        http
+                .csrf(customizer -> customizer.disable())
+                .authorizeHttpRequests(requests -> requests.anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
