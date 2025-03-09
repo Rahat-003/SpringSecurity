@@ -28,6 +28,8 @@ public class SecurityConfig {
 
         http.csrf(custCsrf);
 
-//        return http.build();
+        http.authorizeHttpRequests();
+
+        return http.build();
     }
 }
