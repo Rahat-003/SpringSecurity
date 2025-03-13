@@ -1,6 +1,7 @@
 package com.example.Spring_Security_Demo.controller;
 
 import com.example.Spring_Security_Demo.model.User;
+import com.example.Spring_Security_Demo.service.JwtService;
 import com.example.Spring_Security_Demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,9 @@ public class UserController {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JwtService jwtService;
+
     @PostMapping("register")
     public User register(@RequestBody User user) {
         return userService.saveUser(user);
@@ -30,7 +34,7 @@ public class UserController {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
-        if (authentication.isAuthenticated())   return "Success";
+        if (authentication.isAuthenticated())   return jwtService.generateToken(user.getUsername());
         else return "Login Failed";
     }
 }
