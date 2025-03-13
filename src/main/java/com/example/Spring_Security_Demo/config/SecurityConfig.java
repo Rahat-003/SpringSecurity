@@ -43,7 +43,12 @@ public class SecurityConfig {
 
         http
                 .csrf(customizer -> customizer.disable())
-                .authorizeHttpRequests(requests -> requests.anyRequest().authenticated())
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("register")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
+
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
